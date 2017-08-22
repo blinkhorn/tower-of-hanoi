@@ -1,0 +1,35 @@
+.playingField {
+  display: flex;
+  min-height: 80vh;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+
+.tower {
+  margin: 0 65px;
+}
+
+.base, .rod {
+  background: #926239;
+}
+
+.base {
+  width: 100px;
+  height: 20px;
+}
+
+.rod {
+  width: 20px;
+  height: 250px;
+  margin: 0 auto;
+}
+
+.site {
+	display: flex;
+	min-height: 100vh;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: flex-end;
+}
