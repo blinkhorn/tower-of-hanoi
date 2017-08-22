@@ -5,6 +5,7 @@ while (playing) {
   //Global Variables
   var numberOfDisks; // SET EQUAL to diskField.input once graphics are up
   var name; // = nameField.input();
+  var moveCount = 0;
   //Make sure numberOfDisks is greater than 0
   while (numberOfDisks < 1) {
     console.error("You must play with at least 1 disk.");
@@ -32,17 +33,40 @@ while (playing) {
 
   //Tower class definition
   class Tower {
-    constructor(number) {
-      this.number = number;
+    constructor(number, contents) {
+      this.number = number;  //tower number [0, 1, 3]
+      this.contents = contents; // contains the disk (order[s])
     }
   }
 
   //Disk class definition
   class Disk {
     constructor(order, color) {
-      this.tower = 0;
-      this.order = order;
-      this.color = color;
+      this.tower = 0; // the tower the disk is currently located
+      this.order = order; //size increases with order
+      this.color = color; //disk color
+    }
+  }
+
+  //METHODS
+
+  //Detects if disk is let go over another tower
+  detectLocation(disk, moveCount) {
+    //if drop it on one of the other two towers, call move(), passing that tower among other vars
+    $(`tower${disk.tower + 1 % 3}`).on("mouseover", move(disk, moveCount, `tower${disk.tower + 1 % 3}`));
+    $(`tower${disk.tower + 2 % 3}`).on("mouseover", move(disk, moveCount, `tower${disk.tower + 2 % 3}`));
+  } // if mouse is let go over another tower, call move() function with disk and tower
+
+
+  //determines whether you can move that disk to the tower you're dropping it on
+  move(disk, moveCount, destinationTower) {
+    if (destinationTower.contents.length === 0) {
+      destinationTower.contents.push(disk.order); //push disk.order to tower's contents
+    } else if (disk.order > destinationTower.contents[destinationTower.contents.length - 1]) { //if trying
+                                                                                      //to place a disk on smaller disk
+      console.error("Invalid move: you can only stack disks in increasing size order");
+    } else { //move is valid
+      moveToTower(disk, moveCount, destinationTower); //move disk to new tower with moveToTower()
     }
   }
 
@@ -57,17 +81,36 @@ while (playing) {
   }
 
   //Object instantiations
-  var player = new Player(name); //new Player
-  for (var i = 0; i < 3; i++) {
-    var `tower${i}` = new Tower(i); //3 new Towers
+
+  //new Player
+  var player = new Player(name);
+
+  //empty array and array with all disk.order in it for tower objects
+  var emptyArray = [];
+  var fullContentsArray = [];
+  for (var i = numberOfDisks - 1; i >= 0; i--) {
+    fullContentsArray.push(i);
   }
+
+  //3 new Towers
+  var tower0 = new Tower(0, fullContentsArray);
+  for (var i = 1; i < 3; i++) {
+    var `tower${i}` = new Tower(i, emptyArray);
+  }
+
+  // numberOfDisks new disks
   for (var i = 0; i < numberOfDisks; i++) {
     var `disk${i}` =  new Disk(i, getRandomColor());
   }
 
   //Move Loop ::: While game not over
   while(`disk${numberOfDisks - 1}`.tower === 0 && disk0.tower !== `disk${numberOfDisks - 1}`.tower) {
-
+    if (moveCount === 0) {
+      //disk0.on("mousedown", "startTimes()");
+    }
+    // $(this).on("mousemove", visuallyMove($(this)));
+    //when you let go of the disk with your mouse, call detectLocation
+    $(this).on("mouseup", "detectLocation($(this), moveCount)");
   }
 
 
@@ -81,3 +124,13 @@ while (playing) {
   //   playing = false;
   // })
 }
+
+// var myArray = [];
+// var myVariable = 0;
+// if (myArray.length === 0) {
+//   myArray.push(myVariable);
+// } else if (myArray[myArray.length - 1] < myVariable) {
+//     console.error("Not valid move");
+// } else {
+//   myArray.push(myVariable);
+// }
