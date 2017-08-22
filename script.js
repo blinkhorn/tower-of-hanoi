@@ -51,7 +51,7 @@ while (playing) {
   //METHODS
 
   //Detects if disk is let go over another tower
-  detectLocation(disk, moveCount) {
+  function detectLocation(disk, moveCount) {
     //if drop it on one of the other two towers, call move(), passing that tower among other vars
     $(`tower${disk.tower + 1 % 3}`).on("mouseover", move(disk, moveCount, `tower${disk.tower + 1 % 3}`));
     $(`tower${disk.tower + 2 % 3}`).on("mouseover", move(disk, moveCount, `tower${disk.tower + 2 % 3}`));
@@ -59,7 +59,7 @@ while (playing) {
 
 
   //determines whether you can move that disk to the tower you're dropping it on
-  move(disk, moveCount, destinationTower) {
+  function move(disk, moveCount, destinationTower) {
     if (destinationTower.contents.length === 0) {
       // destinationTower.contents.push(disk.order); //push disk.order to tower's contents
       moveToTower(disk, moveCount, destinationTower); //destinationTower's contents is empty
@@ -73,14 +73,14 @@ while (playing) {
   }
 
   //moves the disk to tower, updates disk.tower, and increments moveCount
-  moveToTower(disk, destinationTower, moveCount) {
+  function moveToTower(disk, destinationTower, moveCount) {
     destinationTower.contents.push(disk.order); //push disk to destinationTower's contents array
     disk.tower = destinationTower.number; // set disks tower number to match destinationTower
     moveCount++; //increment moveCount to indicate another move
   }
 
   //picks a random color for disk
-  getRandomColor() {
+  function getRandomColor() {
     var values = "0123456789ABCDEF";
     var hash = "#";
     for (var i = 0; i < 6; i++) {
@@ -104,24 +104,25 @@ while (playing) {
 
   //3 new Towers
   var tower0 = new Tower(0, fullContentsArray);
-  for (var i = 1; i < 3; i++) {
-    var `tower${i}` = new Tower(i, emptyArray);
-  }
+  var tower1 = new Tower(1, emptyArray);
+  var tower2 = new Tower(2, emptyArray);
 
   // numberOfDisks new disks
+
+
   for (var i = 0; i < numberOfDisks; i++) {
-    var `disk${i}` = new Disk(i, getRandomColor());
+    var disk = new Disk(i, getRandomColor());
   }
 
   //Move Loop ::: While game not over
-  while (`disk${numberOfDisks - 1}`.tower === 0 && disk0.tower !== `disk${numberOfDisks - 1}`.tower) {
+  while (tower1.contents.length === numberOfDisks || tower2.contents.length === numberOfDisks) {
     if (moveCount === 0) {
       //disk0.on("mousedown", "startTimes()");
     }
     // $(this).on("mousemove", visuallyMove($(this)));
     //when you let go of the disk with your mouse, call detectLocation
-    $(this).on("mouseup", "detectLocation($(this), moveCount)");
-      
+    // $(this).on("mouseup", detectLocation($(this), moveCount));
+
     //restartButton()
   }
 
@@ -131,23 +132,10 @@ while (playing) {
   //scoreKeeper()
 
 
-
-
-
   //End conditions
   isFirstOverallGame = false;
-
+  playing = false;
   //exitButton.on("click", function() {
   //   playing = false;
   // })
 }
-
-// var myArray = [];
-// var myVariable = 0;
-// if (myArray.length === 0) {
-//   myArray.push(myVariable);
-// } else if (myArray[myArray.length - 1] < myVariable) {
-//     console.error("Not valid move");
-// } else {
-//   myArray.push(myVariable);
-// }
