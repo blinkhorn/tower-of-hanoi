@@ -1,15 +1,66 @@
-.topText {
+.topText, .bottomText {
   display: flex;
-  min-height: 10vh;
-  margin: 0 auto;
   align-items: flex-start;
 }
 
-.inputDiskNumber, .displayMoves, p {
+.topText {
+  margin: 0 auto;
+  min-height: 10vh;
+}
+
+.bottomText {
+  margin: 80px auto 10px;
+  min-height: 15vh;
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-height: 5vh;
+  margin: auto;
+  justify-content: flex-start;
+}
+
+.statsInfo {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  max-width: 50vh;
+  margin: 0;
+}
+
+.first4StatPs {
+  margin: 10px 60px 0 0;
+  width: 130px;
+}
+
+.theMinMoves {
+  margin: 10px auto;
+  width: 260px;
+}
+
+.bottomContentWrapper {
+  margin: auto;
+  display: flex;
+}
+
+.leaderBoard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.leaderBoard p {
+  margin: 10px 60px 0 0;
+}
+
+.inputDiskNumber, .displayMoves, .topText p {
   margin: 0 35px;
 }
 
- button {
+button, .stopWatch {
    margin: 10px 35px;
  }
 

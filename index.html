@@ -14,9 +14,8 @@
       <input type="text" name="numberOfDisksEntered" value="3">
       <input type="submit" value="Submit">
     </form>
-    <div class="displayMoves">
-      <p>Moves:<br> <span class="moveCountDisplay">0</span></p>
-    </div>
+    <p class="displayMoves">Moves:<br> <span class="moveCountDisplay">0</span></p>
+    <p class="stopWatch">0.00</p>
     <button type="button">Restart</button>
     <button type="button">Solve!</button>
   </section>
@@ -46,7 +45,30 @@
       </div>
     </div>
   </section>
-
+  <section class="bottomText">
+    <div class="bottomContentWrapper">
+      <div class="stats">
+        <form class="playerNameInput">
+          Player:<br>
+          <input type="text" name="numberOfDisksEntered" value="First Last">
+          <input type="submit" value="Submit">
+        </form>
+        <div class="statsInfo">
+          <p class="first4StatPs"><span class="diskNumberDisplay">3 </span>Disks</p>
+          <p class="first4StatPs">Score: <span class="displayTime">0.00</span></p>
+          <p class="first4StatPs">Average Score: </span class="displayAvgScore">0.00</span>
+          </p>
+          <p class="first4StatPs">Top Score: </span class="displayTopScore">0.00</span>
+          </p>
+          <p class="theMinMoves">Minimum Moves: <span class="displayMinMoves">7</span></p>
+        </div>
+      </div>
+      <div class="leaderBoard">
+        <p>Minimum Moves Possible: <span class="displayMinMovesPossible">7</span></p>
+        <p>Top Communtiy Score: <span class="displayTopCommunityScore">0.00</span></p>
+      </div>
+    </div>
+  </section>
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="script.js"></script> -->
 </body>
