@@ -8,33 +8,46 @@
 </head>
 
 <body class="site">
-    <section class="playingField">
-      <div class="tower firstTower">
-        <div class="rod">
+  <section class="topText">
+    <form class="inputDiskNumber">
+      Disks:<br>
+      <input type="text" name="numberOfDisksEntered" value="3">
+      <input type="submit" value="Submit">
+    </form>
+    <div class="displayMoves">
+      <p>Moves:<br> <span class="moveCountDisplay">0</span></p>
+    </div>
+    <button type="button">Restart</button>
+    <button type="button">Solve!</button>
+  </section>
+  <section class="playingField">
+    <div class="tower firstTower">
+      <div class="rod">
 
-        </div>
-        <div class="base">
-
-        </div>
       </div>
-      <div class="tower secondTower">
-        <div class="rod">
+      <div class="base">
 
-        </div>
-        <div class="base">
-
-        </div>
       </div>
-      <div class="tower thirdTower">
-        <div class="rod">
+    </div>
+    <div class="tower secondTower">
+      <div class="rod">
 
-        </div>
-        <div class="base">
-
-        </div>
       </div>
-    </section>
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+      <div class="base">
+
+      </div>
+    </div>
+    <div class="tower thirdTower">
+      <div class="rod">
+
+      </div>
+      <div class="base">
+
+      </div>
+    </div>
+  </section>
+
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="script.js"></script> -->
 </body>
 

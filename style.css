@@ -1,11 +1,25 @@
+.topText {
+  display: flex;
+  min-height: 10vh;
+  margin: 0 auto;
+  align-items: flex-start;
+}
+
+.inputDiskNumber, .displayMoves, p {
+  margin: 0 35px;
+}
+
+ button {
+   margin: 10px 35px;
+ }
+
 .playingField {
   display: flex;
-  min-height: 80vh;
+  min-height: 50vh;
   margin: 0 auto;
   justify-content: center;
   align-items: flex-end;
 }
-
 
 .tower {
   margin: 0 65px;
@@ -28,8 +42,9 @@
 
 .site {
 	display: flex;
+  flex-direction: column;
 	min-height: 100vh;
   margin: 0 auto;
   justify-content: center;
-  align-items: flex-end;
+  align-items: flex-start;
 }
