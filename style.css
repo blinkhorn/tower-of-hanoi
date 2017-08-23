@@ -91,6 +91,9 @@ button, .stopWatch {
   margin: 0 auto;
 }
 
+/*.disk {
+
+}*/
 .site {
 	display: flex;
   flex-direction: column;

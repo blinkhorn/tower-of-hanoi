@@ -45,7 +45,7 @@ while (playing) {
       this.tower = 0; // the tower the disk is currently located
       this.order = order; //size increases with order
       this.color = color; //disk color
-      this.width =  order * 15;
+      this.width = order * 15;
       this.height = order * 5;
     }
   }
@@ -90,8 +90,20 @@ while (playing) {
     return hash;
   }
 
+  $(init);
+
+  function init() {
+    $(".disk").draggable({
+      containment: ".playingField",
+      cursor: "move",
+      snap: ".tower",
+      stack: ".tower"
+    });
+    $('.tower').droppable();
+  }
+
   //Initialize vars with info from HTML
-  numberOfDisks = $( "input[type=text][name=numberOfDisksEntered]" ).val();
+  numberOfDisks = $("input[type=text][name=numberOfDisksEntered]").val();
   console.log(numberOfDisks);
 
   //Object instantiations
@@ -117,7 +129,11 @@ while (playing) {
   for (var i = 0; i < numberOfDisks; i++) {
     var disk = new Disk(i, getRandomColor());
     $(".firstTower").find(".rod").append("<div class='disk'></>");
-    $(".disk").css({"background": `disk.color`, "width": `disk.width`, "height": `disk.height`});
+    $(".disk").css({
+      "background": `disk.color`,
+      "width": `disk.width`,
+      "height": `disk.height`
+    });
   }
 
 
