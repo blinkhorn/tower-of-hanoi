@@ -93,12 +93,22 @@ while (playing) {
   $(init);
 
   function init() {
-    $(".disk").draggable({
-      containment: ".playingField",
-      cursor: "move",
-      snap: ".tower",
-      stack: ".tower"
-    });
+    for (var i = 0; i < numberOfDisks; i++) {
+      var disk = `disk${i}`
+      var disk = new Disk(i, getRandomColor());
+      console.log(disk.order);
+      $(`<div class="disk" id="disk${i}""></>`).data("order", i).appendTo(".firstTower .rod"). draggable( {
+        containment: ".playingField",
+        cursor: "move",
+        stack: ".firstTower .rod",
+        revert: true
+      });
+      $(`#disk${i}`).css({
+        "background": `${disk.color}`,
+        "width": `${disk.width}`,
+        "height": `${disk.height}`
+      });
+    }
     $('.tower').droppable();
   }
 
@@ -125,18 +135,6 @@ while (playing) {
 
   // numberOfDisks new disks
 
-
-  for (var i = 0; i < numberOfDisks; i++) {
-    var disk = `disk${i}`
-    var disk = new Disk(i, getRandomColor());
-    console.log(disk.order);
-    $(".firstTower").find(".rod").append(`<div class='disk' id='disk${i}'></>`);
-    $(`#disk${i}`).css({
-      "background": `${disk.color}`,
-      "width": `${disk.width}`,
-      "height": `${disk.height}`
-    });
-  }
 
 
   //Move Loop ::: While game not over
