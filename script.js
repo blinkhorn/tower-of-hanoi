@@ -95,14 +95,25 @@ while (playing) {
   $(init);
 
   function init() {
+    for (var i = 0; i < 3; i++) {
+      $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
+      $(`<div class="rod" id="rod${i}"></>`).data("number", i).appendTo(`#tower${i}`).droppable({
+        accept: "#rod0, rod1, rod2"
+        // ,
+
+        // hoverClass: 'hovered',
+        // drop: handleDiskDrop
+      });
+      $(`<div class="base" id="base${i}"></>`).appendTo(`#tower${i}`);
+    }
     for (var i = 0; i < numberOfDisks; i++) {
       var diskVar = `disk${i}`
       var disk = new Disk(i, getRandomColor());
       console.log(disk.order);
-      $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo(".firstTower .rod"). draggable( {
+      $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo("#rod0"). draggable( {
         containment: ".playingField",
         cursor: "move",
-        stack: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
+        stack: "#rod0, #rod1, #rod2",
         revert: true
       });
       $(`#${diskVar}`).css({
@@ -111,15 +122,6 @@ while (playing) {
         "height": `${disk.height}`
       });
     }
-    // for (var i = 0; i < 3; i++) {
-    //   $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
-    //   $(`<div class="rod" id="rod${i}"></>`).data("number", i).appendTo(`#tower${i}`).droppable({
-    //     accept: "#rod0, rod1, rod2",
-    //     hoverClass: 'hovered',
-    //     drop: handleDiskDrop
-    //   });
-    //   $(`<div class="base" id="base${i}"></>`).appendTo(`#tower${i}`);
-    // }
     // $('.tower').droppable({
     //   accept: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
     //   hoverClass: 'hovered',
