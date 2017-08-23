@@ -100,7 +100,7 @@ while (playing) {
       $(`<div class="disk" id="disk${i}""></>`).data("order", i).appendTo(".firstTower .rod"). draggable( {
         containment: ".playingField",
         cursor: "move",
-        stack: ".firstTower .rod",
+        stack: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
         revert: true
       });
       $(`#disk${i}`).css({
@@ -109,8 +109,46 @@ while (playing) {
         "height": `${disk.height}`
       });
     }
-    $('.tower').droppable();
+    $('.tower').droppable({
+      accept: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
+      hoverClass: 'hovered',
+      drop: handleDiskDrop
+    });
   }
+
+  function handleDiskDrop( event, ui ) {
+  var slotNumber = $(this).data( 'number' );
+  var cardNumber = ui.draggable.data( 'number' );
+
+  // If the card was dropped to the correct slot,
+  // change the card colour, position it directly
+  // on top of the slot, and prevent it being dragged
+  // again
+
+  if ( slotNumber == cardNumber ) {
+    ui.draggable.addClass( 'correct' );
+    ui.draggable.draggable( 'disable' );
+    $(this).droppable( 'disable' );
+    ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
+    ui.draggable.draggable( 'option', 'revert', false );
+    correctCards++;
+  }
+
+  // If all the cards have been placed correctly then display a message
+  // and reset the cards for another go
+
+  if ( correctCards == 10 ) {
+    $('#successMessage').show();
+    $('#successMessage').animate( {
+      left: '380px',
+      top: '200px',
+      width: '400px',
+      height: '100px',
+      opacity: 1
+    } );
+  }
+
+}
 
   //Initialize vars with info from HTML
   numberOfDisks = $("input[type=text][name=numberOfDisksEntered]").val();
