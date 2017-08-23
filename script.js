@@ -45,8 +45,8 @@ while (playing) {
       this.tower = 0; // the tower the disk is currently located
       this.order = order; //size increases with order
       this.color = color; //disk color
-      this.width = order * 15;
-      this.height = order * 5;
+      this.width = `${(order + 4) * 15}px`;
+      this.height = "13px";
     }
   }
   //METHODS
@@ -127,12 +127,14 @@ while (playing) {
 
 
   for (var i = 0; i < numberOfDisks; i++) {
+    var disk = `disk${i}`
     var disk = new Disk(i, getRandomColor());
-    $(".firstTower").find(".rod").append("<div class='disk'></>");
-    $(".disk").css({
-      "background": `disk.color`,
-      "width": `disk.width`,
-      "height": `disk.height`
+    console.log(disk.order);
+    $(".firstTower").find(".rod").append(`<div class='disk' id='disk${i}'></>`);
+    $(`#disk${i}`).css({
+      "background": `${disk.color}`,
+      "width": `${disk.width}`,
+      "height": `${disk.height}`
     });
   }
 
