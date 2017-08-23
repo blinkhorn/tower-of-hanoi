@@ -3,7 +3,9 @@ var playing = true; //game will play until this is false
 
 while (playing) {
   //Global Variables
-  var numberOfDisks; // SET EQUAL to diskField.input once graphics are up
+  //Initialize vars with info from HTML
+  numberOfDisks = $("input[type=text][name=numberOfDisksEntered]").val();
+  console.log(numberOfDisks);
   var name; // = nameField.input();
   var moveCount = 0;
   //Make sure numberOfDisks is greater than 0
@@ -94,26 +96,35 @@ while (playing) {
 
   function init() {
     for (var i = 0; i < numberOfDisks; i++) {
-      var disk = `disk${i}`
+      var diskVar = `disk${i}`
       var disk = new Disk(i, getRandomColor());
       console.log(disk.order);
-      $(`<div class="disk" id="disk${i}""></>`).data("order", i).appendTo(".firstTower .rod"). draggable( {
+      $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo(".firstTower .rod"). draggable( {
         containment: ".playingField",
         cursor: "move",
         stack: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
         revert: true
       });
-      $(`#disk${i}`).css({
+      $(`#${diskVar}`).css({
         "background": `${disk.color}`,
         "width": `${disk.width}`,
         "height": `${disk.height}`
       });
     }
-    $('.tower').droppable({
-      accept: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
-      hoverClass: 'hovered',
-      drop: handleDiskDrop
-    });
+    // for (var i = 0; i < 3; i++) {
+    //   $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
+    //   $(`<div class="rod" id="rod${i}"></>`).data("number", i).appendTo(`#tower${i}`).droppable({
+    //     accept: "#rod0, rod1, rod2",
+    //     hoverClass: 'hovered',
+    //     drop: handleDiskDrop
+    //   });
+    //   $(`<div class="base" id="base${i}"></>`).appendTo(`#tower${i}`);
+    // }
+    // $('.tower').droppable({
+    //   accept: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
+    //   hoverClass: 'hovered',
+    //   drop: handleDiskDrop
+    // });
   }
 
   function handleDiskDrop( event, ui ) {
@@ -150,9 +161,7 @@ while (playing) {
 
 }
 
-  //Initialize vars with info from HTML
-  numberOfDisks = $("input[type=text][name=numberOfDisksEntered]").val();
-  console.log(numberOfDisks);
+
 
   //Object instantiations
 
