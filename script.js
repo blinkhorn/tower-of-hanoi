@@ -5,7 +5,21 @@ while (playing) {
   //Global Variables
   //Initialize vars with info from HTML
   numberOfDisks = $("input[type=text][name=numberOfDisksEntered]").val();
-  console.log(numberOfDisks);
+  // console.log(numberOfDisks);
+
+  //empty array and array with all disk.order in it for tower objects
+  var emptyArray = [];
+  var fullContentsArray = [];
+  for (var i = numberOfDisks - 1; i >= 0; i--) {
+    fullContentsArray.push(i);
+  }
+
+  //3 new Towers
+  var tower00 = new Tower(0, fullContentsArray);
+  var tower01 = new Tower(1, emptyArray);
+  var tower02 = new Tower(2, emptyArray);
+
+
   var name; // = nameField.input();
   var moveCount = 0;
   //Make sure numberOfDisks is greater than 0
@@ -98,14 +112,18 @@ while (playing) {
     for (var i = 0; i < 3; i++) {
       $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
       $(`<div class="rod" id="rod${i}"></>`).data("number", i).appendTo(`#tower${i}`).droppable({
-        accept: "#rod0, rod1, rod2"
-        // ,
-
-        // hoverClass: 'hovered',
-        // drop: handleDiskDrop
+        accept: "#rod0, rod1, rod2",
+        hoverClass: 'hovered',
+        drop: handleDiskDrop
       });
       $(`<div class="base" id="base${i}"></>`).appendTo(`#tower${i}`);
     }
+
+    //add arrays for disks to the tower elements' data
+    $("#rod0").data("diskArray",fullContentsArray);
+    $("#rod1").data("diskArray",emptyArray);
+    $("#rod2").data("diskArray",emptyArray);
+
     for (var i = 0; i < numberOfDisks; i++) {
       var diskVar = `disk${i}`
       var disk = new Disk(i, getRandomColor());
@@ -121,30 +139,28 @@ while (playing) {
         "width": `${disk.width}`,
         "height": `${disk.height}`
       });
+      $(`#${diskVar}`).data("rodLocation", 0);
     }
-    // $('.tower').droppable({
-    //   accept: ".firstTower .rod, .secondTower .rod, .thirdTower .rod",
-    //   hoverClass: 'hovered',
-    //   drop: handleDiskDrop
-    // });
   }
 
   function handleDiskDrop( event, ui ) {
-  var slotNumber = $(this).data( 'number' );
-  var cardNumber = ui.draggable.data( 'number' );
+  var rodNumber = $(this).data("number");
+  var rodDiskArray = $(this).data("diskArray");
+  var diskRodLocation = ui.draggable.data("rodLocation");
+  var diskOrder = ui.draggable.data("order");
 
   // If the card was dropped to the correct slot,
   // change the card colour, position it directly
   // on top of the slot, and prevent it being dragged
   // again
 
-  if ( slotNumber == cardNumber ) {
-    ui.draggable.addClass( 'correct' );
+  if (rodNumber === ((diskRodLocation + 1) % 3) || rodNumber === ((diskRodLocation + 2) % 3) && rodDiskArray.length === 0 || diskOrder < rodDiskArray[rodDiskArray.length -1] ) {
+    // ui.draggable.addClass( 'correct' );
     ui.draggable.draggable( 'disable' );
     $(this).droppable( 'disable' );
     ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
     ui.draggable.draggable( 'option', 'revert', false );
-    correctCards++;
+    // correctCards++;
   }
 
   // If all the cards have been placed correctly then display a message
@@ -170,19 +186,8 @@ while (playing) {
   //new Player
   // var player = new Player(name);
 
-  //empty array and array with all disk.order in it for tower objects
-  var emptyArray = [];
-  var fullContentsArray = [];
-  for (var i = numberOfDisks - 1; i >= 0; i--) {
-    fullContentsArray.push(i);
-  }
 
-  //3 new Towers
-  var tower0 = new Tower(0, fullContentsArray);
-  var tower1 = new Tower(1, emptyArray);
-  var tower2 = new Tower(2, emptyArray);
 
-  // numberOfDisks new disks
 
 
 
