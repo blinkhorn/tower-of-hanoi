@@ -14,11 +14,11 @@ while (playing) {
 
   var minMovesPossible = 2 ** numberOfDisks - 1;
 
-  //Make sure you entered text
-  while (name === "") {
-    console.error("Please enter your name.");
-    // name = nameField.input();
-  }
+  // //Make sure you entered text
+  // while (name === "") {
+  //   console.error("Please enter your name.");
+  //   // name = nameField.input();
+  // }
 
   //Player class definition
   class Player {
@@ -45,9 +45,10 @@ while (playing) {
       this.tower = 0; // the tower the disk is currently located
       this.order = order; //size increases with order
       this.color = color; //disk color
+      this.width =  order * 15;
+      this.height = order * 5;
     }
   }
-
   //METHODS
 
   //Detects if disk is let go over another tower
@@ -84,16 +85,19 @@ while (playing) {
     var values = "0123456789ABCDEF";
     var hash = "#";
     for (var i = 0; i < 6; i++) {
-      hash += values[Math.floor(math.random() * 16)];
+      hash += values[Math.floor(Math.random() * 16)];
     }
     return hash;
   }
 
+  //Initialize vars with info from HTML
+  numberOfDisks = $( "input[type=text][name=numberOfDisksEntered]" ).val();
+  console.log(numberOfDisks);
 
   //Object instantiations
 
   //new Player
-  var player = new Player(name);
+  // var player = new Player(name);
 
   //empty array and array with all disk.order in it for tower objects
   var emptyArray = [];
@@ -112,7 +116,10 @@ while (playing) {
 
   for (var i = 0; i < numberOfDisks; i++) {
     var disk = new Disk(i, getRandomColor());
+    $(".firstTower").find(".rod").append("<div class='disk'></>");
+    $(".disk").css({"background": `disk.color`, "width": `disk.width`, "height": `disk.height`});
   }
+
 
   //Move Loop ::: While game not over
   while (tower1.contents.length === numberOfDisks || tower2.contents.length === numberOfDisks) {
