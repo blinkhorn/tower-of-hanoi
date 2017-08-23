@@ -15,9 +15,9 @@ while (playing) {
   }
 
   //3 new Towers
-  var tower00 = new Tower(0, fullContentsArray);
-  var tower01 = new Tower(1, emptyArray);
-  var tower02 = new Tower(2, emptyArray);
+  // var tower00 = new Tower(0, fullContentsArray);
+  // var tower01 = new Tower(1, emptyArray);
+  // var tower02 = new Tower(2, emptyArray);
 
 
   var name; // = nameField.input();
@@ -65,6 +65,8 @@ while (playing) {
       this.height = "13px";
     }
   }
+
+
   //METHODS
 
   //Detects if disk is let go over another tower
@@ -112,7 +114,6 @@ while (playing) {
     for (var i = 0; i < 3; i++) {
       $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
       $(`<div class="rod" id="rod${i}"></>`).data("number", i).appendTo(`#tower${i}`).droppable({
-        accept: "#rod0, rod1, rod2",
         hoverClass: 'hovered',
         drop: handleDiskDrop
       });
@@ -125,7 +126,7 @@ while (playing) {
     $("#rod2").data("diskArray",emptyArray);
 
     for (var i = 0; i < numberOfDisks; i++) {
-      var diskVar = `disk${i}`
+      var diskVar = `disk${i}`;
       var disk = new Disk(i, getRandomColor());
       console.log(disk.order);
       $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo("#rod0"). draggable( {
@@ -144,42 +145,46 @@ while (playing) {
   }
 
   function handleDiskDrop( event, ui ) {
+  console.log("in handleDiskDrop")
   var rodNumber = $(this).data("number");
   var rodDiskArray = $(this).data("diskArray");
   var diskRodLocation = ui.draggable.data("rodLocation");
   var diskOrder = ui.draggable.data("order");
 
-  // If the card was dropped to the correct slot,
-  // change the card colour, position it directly
-  // on top of the slot, and prevent it being dragged
-  // again
-
   if (rodNumber === ((diskRodLocation + 1) % 3) || rodNumber === ((diskRodLocation + 2) % 3) && rodDiskArray.length === 0 || diskOrder < rodDiskArray[rodDiskArray.length -1] ) {
-    // ui.draggable.addClass( 'correct' );
-    ui.draggable.draggable( 'disable' );
-    $(this).droppable( 'disable' );
-    ui.draggable.position( { of: $(this), my: 'left top', at: 'left top' } );
+    // ui.draggable.draggable( 'disable' );
+    // $(this).droppable( 'disable' );
+    ui.draggable.position({of: $(this), my: 'center bottom', at: 'center bottom'});
     ui.draggable.draggable( 'option', 'revert', false );
-    // correctCards++;
+    rodDiskArray.push(diskOrder);
+    diskRodLocation = rodNumber;
+    console.log(rodNumber);
+    console.log(rodDiskArray);
+    console.log(diskRodLocation);
+    console.log(diskOrder);
+    moveCount++;
+    // returnRevert($(`#rod${rodNumber}`), ui);
   }
 
   // If all the cards have been placed correctly then display a message
   // and reset the cards for another go
 
-  if ( correctCards == 10 ) {
-    $('#successMessage').show();
-    $('#successMessage').animate( {
-      left: '380px',
-      top: '200px',
-      width: '400px',
-      height: '100px',
-      opacity: 1
-    } );
-  }
-
+  // if ( correctCards == 10 ) {
+  //   $('#successMessage').show();
+  //   $('#successMessage').animate( {
+  //     left: '380px',
+  //     top: '200px',
+  //     width: '400px',
+  //     height: '100px',
+  //     opacity: 1
+  //   } );
+  // }
+  // ui.draggable.draggable( 'option', 'revert', true );
 }
 
-
+function returnRevert( event, ui ) {
+  ui.draggable.draggable( 'option', 'revert', true );
+}
 
   //Object instantiations
 
@@ -192,16 +197,16 @@ while (playing) {
 
 
   //Move Loop ::: While game not over
-  while (tower1.contents.length === numberOfDisks || tower2.contents.length === numberOfDisks) {
-    if (moveCount === 0) {
-      //disk0.on("mousedown", "startTimes()");
-    }
-    // $(this).on("mousemove", visuallyMove($(this)));
-    //when you let go of the disk with your mouse, call detectLocation
-    // $(this).on("mouseup", detectLocation($(this), moveCount));
-
-    //restartButton()
-  }
+  // while (tower1.contents.length === numberOfDisks || tower2.contents.length === numberOfDisks) {
+  //   if (moveCount === 0) {
+  //     //disk0.on("mousedown", "startTimes()");
+  //   }
+  //   // $(this).on("mousemove", visuallyMove($(this)));
+  //   //when you let go of the disk with your mouse, call detectLocation
+  //   // $(this).on("mouseup", detectLocation($(this), moveCount));
+  //
+  //   //restartButton()
+  // }
 
   //stopTimer()
   //storeScoresAndTime()
