@@ -208,9 +208,13 @@ while (playing) {
     // console.log("in handleDiskDrop")
     if (goodToDrop($(this), ui.draggable)) {
       var rodNumber = $(this).data("number");
-      var rodDiskArray = $(this).data("diskArray");
+
+      // var rodDiskArray = $(this).data("diskArray");
+      // var rodDiskArray = $("#rod1").data("diskArray");
       var diskRodLocation = ui.draggable.data("rodLocation");
+      var oldRodNumber = diskRodLocation;
       var diskOrder = ui.draggable.data("order");
+
       // console.log("the disk order in handleDiskDrop is " + diskOrder);
       ui.draggable.draggable('option', 'revert', false);
       $(this).append(ui.draggable.detach());
@@ -228,6 +232,16 @@ while (playing) {
         my: 'center bottom',
         at: 'center bottom'
       })
+
+      // rodDiskArray.pop(ui.draggable);
+
+
+      // $(`#rod${oldRodNumber}`).data("diskArray").pop();
+      // $(`#rod${rodNumber}`).data("diskArray").push(ui);
+      //
+      // console.log($(`#rod${oldRodNumber}`).data("diskArray").length);
+      // console.log($(`#rod${rodNumber}`).data("diskArray").length);
+
       // var diskArrays = $(".rod").data("diskArray"); //////NEW MAYBE ISSUE
       // var movableDisks = $("diskArrays:last-child");
       // $movableBlocks = $('[data-block]:last-child');
@@ -254,7 +268,7 @@ while (playing) {
   function goodToDrop(rod, disk) {
     // console.log("in good to drop");
     var lastDisk = rod.children().eq(0);
-    console.log("last disk is " + lastDisk.data("order"));
+    // console.log("last disk is " + lastDisk.data("order"));
     // console.log("the dragged disk's order is " + disk.data("order"));
     if (parseInt(disk.data("order")) < parseInt(lastDisk.data("order")) || rod.children().length === 0) {
       return true;
