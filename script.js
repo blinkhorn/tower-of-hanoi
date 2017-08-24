@@ -211,6 +211,7 @@ while (playing) {
       var rodDiskArray = $(this).data("diskArray");
       var diskRodLocation = ui.draggable.data("rodLocation");
       var diskOrder = ui.draggable.data("order");
+      console.log("the disk order in handleDiskDrop is " + diskOrder);
       ui.draggable.draggable('option', 'revert', false);
       $(this).append(ui.draggable.detach());
       // ui.draggable.draggable( 'disable' );
@@ -237,13 +238,17 @@ while (playing) {
       moveCount++;
       movable();
       // returnRevert($(`#rod${rodNumber}`), ui);
+    } else {
+      ui.draggable.draggable('option', 'revert', true);
     }
   }
 
   function goodToDrop(rod, disk) {
+    console.log("in good to drop");
     var lastDisk = rod.children().last();
-    console.log(lastDisk);
-    if (parseInt(disk.attr("order")) < parseInt(lastDisk.attr("order")) || rod.children().length === 0) {
+    console.log("last disk is " + lastDisk.data("order"));
+    console.log("the dragged disk's order is " + disk.data("order"));
+    if (parseInt(disk.data("order")) < parseInt(lastDisk.data("order")) || rod.children().length === 0) {
       return true;
     } else {
       return false;
@@ -266,9 +271,9 @@ while (playing) {
   // ui.draggable.draggable( 'option', 'revert', true );
 
 
-  function returnRevert(event, ui) {
-    ui.draggable.draggable('option', 'revert', true);
-  }
+  // function returnRevert(event, ui) {
+  //   ui.draggable.draggable('option', 'revert', true);
+  // }
 
   //Object instantiations
 
