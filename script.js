@@ -127,15 +127,15 @@ while (playing) {
     for (var i = 0; i < numberOfDisks; i++) {
       var diskVar = `disk${i}`;
       var disk = new Disk(i, getRandomColor());
-      console.log(disk.order);
+      // console.log(disk.order);
       $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo("#rod0").draggable({
         containment: ".playingField",
         cursor: "move",
         stack: "#rod0, #rod1, #rod2",
         revert: true
       });
-      $("#rod0").data("diskArray").unshift(disk);
-      console.log($("#rod0").data("diskArray"));
+      $("#rod0").data("diskArray").push(disk);
+      // console.log($("#rod0").data("diskArray"));
       $(`#${diskVar}`).css({
         "background": `${disk.color}`,
         "width": `${disk.width}`,
@@ -149,13 +149,13 @@ while (playing) {
     //create .movable array for the
     var diskArrays = $(".rod").data("diskArray"); //////NEW MAYBE ISSUE
     var movableDisks = diskArrays[numberOfDisks - 1];
-    console.log(movableDisks);
+    // console.log(movableDisks);
 
 
     // console.log(disksDisks);
     // console.log(movableDisks);
 
-    console.log(diskArrays[numberOfDisks - 1]);
+    // console.log(diskArrays[numberOfDisks - 1]);
 
 
     // console.log($("#rod0").children().length);
@@ -198,20 +198,20 @@ while (playing) {
     $('.disk').removeClass("movable");
     for (i = 0; i < 3; i++) {
       $('.rod').eq(i).children().eq(0).addClass("movable");
-      console.log($('.rod').eq(i).children().eq(0));
+      // console.log($('.rod').eq(i).children().eq(0));
 
     }
-    console.log($('.disk'));
+    // console.log($('.disk'));
   }
 
   function handleDiskDrop(event, ui) {
-    console.log("in handleDiskDrop")
+    // console.log("in handleDiskDrop")
     if (goodToDrop($(this), ui.draggable)) {
       var rodNumber = $(this).data("number");
       var rodDiskArray = $(this).data("diskArray");
       var diskRodLocation = ui.draggable.data("rodLocation");
       var diskOrder = ui.draggable.data("order");
-      console.log("the disk order in handleDiskDrop is " + diskOrder);
+      // console.log("the disk order in handleDiskDrop is " + diskOrder);
       ui.draggable.draggable('option', 'revert', false);
       $(this).append(ui.draggable.detach());
       // ui.draggable.draggable( 'disable' );
@@ -220,6 +220,14 @@ while (playing) {
         my: 'center bottom',
         at: 'center bottom'
       });
+      ui.draggable.position({ of: $(this).children().eq(0),
+        my: 'center bottom',
+        at: 'center bottom'
+      })
+      $(this).children().eq(0).position({ of: $(this),
+        my: 'center bottom',
+        at: 'center bottom'
+      })
       // var diskArrays = $(".rod").data("diskArray"); //////NEW MAYBE ISSUE
       // var movableDisks = $("diskArrays:last-child");
       // $movableBlocks = $('[data-block]:last-child');
@@ -229,12 +237,12 @@ while (playing) {
       //   revert: true
       // });
 
-      rodDiskArray.push(diskOrder);
-      diskRodLocation = rodNumber;
-      console.log(rodNumber);
-      console.log(rodDiskArray);
-      console.log(diskRodLocation);
-      console.log(diskOrder);
+      // rodDiskArray.push(diskOrder);
+      // diskRodLocation = rodNumber;
+      // console.log(rodNumber);
+      // console.log(rodDiskArray);
+      // console.log(diskRodLocation);
+      // console.log(diskOrder);
       moveCount++;
       movable();
       // returnRevert($(`#rod${rodNumber}`), ui);
@@ -244,10 +252,10 @@ while (playing) {
   }
 
   function goodToDrop(rod, disk) {
-    console.log("in good to drop");
-    var lastDisk = rod.children().last();
+    // console.log("in good to drop");
+    var lastDisk = rod.children().eq(0);
     console.log("last disk is " + lastDisk.data("order"));
-    console.log("the dragged disk's order is " + disk.data("order"));
+    // console.log("the dragged disk's order is " + disk.data("order"));
     if (parseInt(disk.data("order")) < parseInt(lastDisk.data("order")) || rod.children().length === 0) {
       return true;
     } else {
