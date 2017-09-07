@@ -131,7 +131,9 @@ while (playing) {
     //I think one bug source is that `this` can potentially be the tower element
     //which contains your rods
 
-    // an alternative might be to use event target
+    // an alternative might be to use event.target
+
+    // check out https://api.jquery.com/event.stoppropagation/ for more info
     console.log("handleDiskDrop this:", this, "ui", ui);
 
     if (goodToDrop($(this), ui.draggable)) {
