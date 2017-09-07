@@ -1,3 +1,7 @@
+// My overall feedback is don't be afraid to throw away non-working code.
+// There are pieces of a variety of approaches here, which is a significant
+// distraction while you're implementing an approach
+
 var isFirstOverallGame = true; //helps determine first communityTopScore later on
 var playing = true; //game will play until this is false
 
@@ -11,13 +15,6 @@ while (playing) {
   var emptyArray = [];
   var fullContentsArray = [];
 
-
-  //3 new Towers
-  // var tower00 = new Tower(0, fullContentsArray);
-  // var tower01 = new Tower(1, emptyArray);
-  // var tower02 = new Tower(2, emptyArray);
-
-
   var name; // = nameField.input();
   var moveCount = 0;
   //Make sure numberOfDisks is greater than 0
@@ -27,31 +24,6 @@ while (playing) {
   }
 
   var minMovesPossible = 2 ** numberOfDisks - 1;
-
-  // //Make sure you entered text
-  // while (name === "") {
-  //   console.error("Please enter your name.");
-  //   // name = nameField.input();
-  // }
-
-  // //Player class definition
-  // class Player {
-  //   constructor(name) {
-  //     this.name = name;
-  //     scoreForDiskNumber = {
-  //       runningScore: 0,
-  //       numberOfGames: 0
-  //     }
-  //   }
-  // }
-  //
-  // //Tower class definition
-  // class Tower {
-  //   constructor(number, contents) {
-  //     this.number = number; //tower number [0, 1, 3]
-  //     this.contents = contents; // contains the disk (order[s])
-  //   }
-  // }
 
   //Disk class definition
   class Disk {
@@ -65,270 +37,158 @@ while (playing) {
   }
 
 
-  //METHODS
-
-  // //Detects if disk is let go over another tower
-  // function detectLocation(disk, moveCount) {
-  //   //if drop it on one of the other two towers, call move(), passing that tower among other vars
-  //   $(`tower${disk.tower + 1 % 3}`).on("mouseover", move(disk, moveCount, `tower${disk.tower + 1 % 3}`));
-  //   $(`tower${disk.tower + 2 % 3}`).on("mouseover", move(disk, moveCount, `tower${disk.tower + 2 % 3}`));
-  // } // if mouse is let go over another tower, call move() function with disk and tower
-
-  //
-  // //determines whether you can move that disk to the tower you're dropping it on
-  // function move(disk, moveCount, destinationTower) {
-  //   if (destinationTower.contents.length === 0) {
-  //     // destinationTower.contents.push(disk.order); //push disk.order to tower's contents
-  //     moveToTower(disk, moveCount, destinationTower); //destinationTower's contents is empty
-  //     //so move disk there
-  //   } else if (disk.order > destinationTower.contents[destinationTower.contents.length - 1]) { //if trying
-  //     //to place a disk on smaller disk
-  //     console.error("Invalid move: you can only stack disks in increasing size order");
-  //   } else { //move is valid
-  //     moveToTower(disk, moveCount, destinationTower); //move disk to new tower with moveToTower()
-  //   }
-  // }
-  //
-  // //moves the disk to tower, updates disk.tower, and increments moveCount
-  // function moveToTower(disk, destinationTower, moveCount) {
-  //   destinationTower.contents.push(disk.order); //push disk to destinationTower's contents array
-  //   disk.tower = destinationTower.number; // set disks tower number to match destinationTower
-  //   moveCount++; //increment moveCount to indicate another move
-  // }
-
   //picks a random color for disk
   function getRandomColor() {
     var values = "0123456789ABCDEF";
     var hash = "#";
-    for (var i = 0; i < 6; i++) {
+    for (var i = 0; i < 6; i++) { // 6 is an example of a 'magic number'
+    // Better practice is to have a constant like...
+    // const HEX_DIGITS = 6
+    // and then use it in a for-loop like this...
+    // for (i = 0; i < HEX_DIGITS; i++) {
       hash += values[Math.floor(Math.random() * 16)];
     }
     return hash;
   }
 
-  $(init);
+
+  $(init); // would just use init() to call init, especially since init doesn't
+  // return anything
 
   function init() {
+    // You can replace your for-loops with https://api.jquery.com/each/
     for (var i = 0; i < 3; i++) {
-      $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
-      $(`<div class="rod" id="rod${i}"></>`).data("number", i).appendTo(`#tower${i}`);
-      $(`<div class="base" id="base${i}"></>`).appendTo(`#tower${i}`);
+      // since you have a container for your rods, take a look at the link below
+      // https://api.jquery.com/event.stoppropagation/
+      // I think that is one potential source of bugs in your program
+      $(`<div class="tower" id="tower${i}"></div>`).data("number", i).appendTo(".playingField");
+      $(`<div class="rod" id="rod${i}"></div>`).data("number", i).appendTo(`#tower${i}`);
+      $(`<div class="base" id="base${i}"></div>`).appendTo(`#tower${i}`);
     }
+
+
 
     //add arrays for disks to the tower elements' data
     for (var i = 0; i < 3; i++) {
       $(`#rod${i}`).data("diskArray", emptyArray);
     }
-    // $("#rod0").data("diskArray", fullContentsArray);
-    // $("#rod1").data("diskArray", emptyArray);
-    // $("#rod2").data("diskArray", emptyArray);
 
 
     for (var i = 0; i < numberOfDisks; i++) {
-      var diskVar = `disk${i}`;
+      var diskVar = `disk${i}`; //suggested name: diskHtmlId
       var disk = new Disk(i, getRandomColor());
-      // console.log(disk.order);
-      $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo("#rod0").draggable({
-        containment: ".playingField",
-        cursor: "move",
-        stack: "#rod0, #rod1, #rod2",
-        revert: true
-      });
+
+      // I might make only the top disk in each stack/rod draggable
+      // If you go that route, I would break that out into a function that runs
+      // each time through the game loop
+      $(`<div class="disk" id="${diskVar}"></div>`)
+        .data("order", i) // might call this 'size' rather than 'order'
+        .appendTo("#rod0")
+        .draggable({
+          containment: ".playingField",
+          cursor: "move",
+          stack: "#rod0, #rod1, #rod2", //should be .disk I think according to the jQuery Ui docs
+          //https://api.jqueryui.com/draggable/#option-stack
+          revert: true
+        })
+      // I would avoid the pattern below and just use .children() to read from
+      // the DOM directly, rather than storing an array as a data attribute of
+      // a rod DOM element
       $("#rod0").data("diskArray").push(disk);
-      // console.log($("#rod0").data("diskArray"));
       $(`#${diskVar}`).css({
-        "background": `${disk.color}`,
-        "width": `${disk.width}`,
-        "height": `${disk.height}`
+        background: `${disk.color}`, // dont need quotes for keys here
+        width: `${disk.width}`,
+        height: `${disk.height}`
       });
       $(`#${diskVar}`).data("rodLocation", 0);
     }
 
     movable();
 
-    //create .movable array for the
-    var diskArrays = $(".rod").data("diskArray"); //////NEW MAYBE ISSUE
-    var movableDisks = diskArrays[numberOfDisks - 1];
-    // console.log(movableDisks);
-
-
-    // console.log(disksDisks);
-    // console.log(movableDisks);
-
-    // console.log(diskArrays[numberOfDisks - 1]);
-
-
-    // console.log($("#rod0").children().length);
+    // //create .movable array for the
+    // var diskArrays = $(".rod").data("diskArray"); //////NEW MAYBE ISSUE
+    // console.log('general disk array', diskArrays);
+    // var movableDisks = diskArrays[numberOfDisks - 1];
 
     $(".rod").droppable({
       accept: ".movable",
       hoverClass: 'hovered',
       drop: handleDiskDrop
     });
-
-    // $stacks.droppable({
-    //   accept: ".movable",
-    //   drop: function(event, ui) {
-    //     if (!gameover) {
-    //       if (goodToDrop($(this), ui.draggable)) {
-    //         ui.draggable.draggable('option', 'revert', false);
-    //         $(this).append(ui.draggable.detach());
-    //         ui.draggable.css({
-    //           'top': 0,
-    //           'left': 0
-    //         });
-    //         //reset things
-    //         $movableBlocks = $('[data-block]:last-child');
-    //         $('[data-block]').removeClass("movable");
-    //         $movableBlocks.addClass("movable");
-    //         $blocks.draggable({
-    //           revert: true
-    //         });
-    //         //checkForWin
-    //         checkForWin();
-    //       }
-    //     } else {
-    //       resetGame();
-    //     }
-    //   }
-    // });
   }
 
   function movable() {
     $('.disk').removeClass("movable");
+    // const NUM_RODS = 3
+    // for (i = 0; i < NUM_RODS; i++) {
+
     for (i = 0; i < 3; i++) {
       $('.rod').eq(i).children().eq(0).addClass("movable");
-      // console.log($('.rod').eq(i).children().eq(0));
-
     }
-    // console.log($('.disk'));
   }
 
   function handleDiskDrop(event, ui) {
-    // console.log("in handleDiskDrop")
+    //I think one bug source is that `this` can potentially be the tower element
+    //which contains your rods
+
+    // an alternative might be to use event.target
+
+    // check out https://api.jquery.com/event.stoppropagation/ for more info
+    console.log("handleDiskDrop this:", this, "ui", ui);
+
     if (goodToDrop($(this), ui.draggable)) {
       var rodNumber = $(this).data("number");
 
-      // var rodDiskArray = $(this).data("diskArray");
-      // var rodDiskArray = $("#rod1").data("diskArray");
       var diskRodLocation = ui.draggable.data("rodLocation");
       var oldRodNumber = diskRodLocation;
       var diskOrder = ui.draggable.data("order");
 
-      // console.log("the disk order in handleDiskDrop is " + diskOrder);
+      // Ultimately I think your stacking bug has to do with the order of DOM
+      // operations below
       ui.draggable.draggable('option', 'revert', false);
-      $(this).append(ui.draggable.detach());
-      // ui.draggable.draggable( 'disable' );
-      // $(this).droppable( 'disable' );
-      ui.draggable.position({ of: $(this),
-        my: 'center bottom',
-        at: 'center bottom'
-      });
-      ui.draggable.position({ of: $(this).children().eq(0),
-        my: 'center bottom',
-        at: 'center bottom'
-      })
-      $(this).children().eq(0).position({ of: $(this),
+
+      $(this).append(ui.draggable.detach()) //appending may not be what you want
+      // maybe prepending is what you want, since it would add the element to
+      // the top of the parent element's NodeList (make it first child)
+
+      ui.draggable.position({
+        of: $(this),
         my: 'center bottom',
         at: 'center bottom'
       })
 
-      // rodDiskArray.pop(ui.draggable);
+      ui.draggable.position({
+        of: $(this).children().eq(0),
+        my: 'center bottom',
+        at: 'center bottom'
+      })
 
+      $(this).children().eq(0).position({
+        of: $(this),
+        my: 'center bottom',
+        at: 'center bottom'
+      })
 
-      // $(`#rod${oldRodNumber}`).data("diskArray").pop();
-      // $(`#rod${rodNumber}`).data("diskArray").push(ui);
-      //
-      // console.log($(`#rod${oldRodNumber}`).data("diskArray").length);
-      // console.log($(`#rod${rodNumber}`).data("diskArray").length);
-
-      // var diskArrays = $(".rod").data("diskArray"); //////NEW MAYBE ISSUE
-      // var movableDisks = $("diskArrays:last-child");
-      // $movableBlocks = $('[data-block]:last-child');
-      // $('[data-block]').removeClass("movable");
-      // $movableBlocks.addClass("movable");
-      // $blocks.draggable({
-      //   revert: true
-      // });
-
-      // rodDiskArray.push(diskOrder);
-      // diskRodLocation = rodNumber;
-      // console.log(rodNumber);
-      // console.log(rodDiskArray);
-      // console.log(diskRodLocation);
-      // console.log(diskOrder);
-      moveCount++;
-      movable();
-      // returnRevert($(`#rod${rodNumber}`), ui);
+      movable()
     } else {
       ui.draggable.draggable('option', 'revert', true);
     }
   }
 
   function goodToDrop(rod, disk) {
-    // console.log("in good to drop");
-    var lastDisk = rod.children().eq(0);
-    // console.log("last disk is " + lastDisk.data("order"));
-    // console.log("the dragged disk's order is " + disk.data("order"));
+    var lastDisk = rod.children().eq(0); //firstDisk?
+
+    //think you want:
+    // if ((parseInt(disk.data("order")) < parseInt(lastDisk.data("order"))) || rod.children().length === 0) {
     if (parseInt(disk.data("order")) < parseInt(lastDisk.data("order")) || rod.children().length === 0) {
       return true;
     } else {
       return false;
     }
   }
-
-  // If all the cards have been placed correctly then display a message
-  // and reset the cards for another go
-
-  // if ( correctCards == 10 ) {
-  //   $('#successMessage').show();
-  //   $('#successMessage').animate( {
-  //     left: '380px',
-  //     top: '200px',
-  //     width: '400px',
-  //     height: '100px',
-  //     opacity: 1
-  //   } );
-  // }
-  // ui.draggable.draggable( 'option', 'revert', true );
-
-
-  // function returnRevert(event, ui) {
-  //   ui.draggable.draggable('option', 'revert', true);
-  // }
-
-  //Object instantiations
-
-  //new Player
-  // var player = new Player(name);
-
-
-
-
-
-
-  //Move Loop ::: While game not over
-  // while (tower1.contents.length === numberOfDisks || tower2.contents.length === numberOfDisks) {
-  //   if (moveCount === 0) {
-  //     //disk0.on("mousedown", "startTimes()");
-  //   }
-  //   // $(this).on("mousemove", visuallyMove($(this)));
-  //   //when you let go of the disk with your mouse, call detectLocation
-  //   // $(this).on("mouseup", detectLocation($(this), moveCount));
-  //
-  //   //restartButton()
-  // }
-
-  //stopTimer()
-  //storeScoresAndTime()
-  //printEndMessage()
-  //scoreKeeper()
-
-
-  //End conditions
   isFirstOverallGame = false;
   playing = false;
-  //exitButton.on("click", function() {
-  //   playing = false;
-  // })
 }
+
+// for another jquery ui example
+// https://blogocode.wordpress.com/2012/10/22/towers-of-hanoi-with-jquery/
