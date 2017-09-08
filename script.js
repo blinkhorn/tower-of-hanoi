@@ -14,7 +14,6 @@ while (playing) {
   var emptyArray2 = [];
 
 
-
   var name; // = nameField.input();
   var moveCount = 0;
   //Make sure numberOfDisks is greater than 0
@@ -35,6 +34,57 @@ while (playing) {
       this.height = "13px";
     }
   }
+
+
+  //picks a random color for disk
+  function getRandomColor() {
+    var values = "0123456789ABCDEF";
+    var hash = "#";
+    for (var i = 0; i < 6; i++) {
+      hash += values[Math.floor(Math.random() * 16)];
+    }
+    return hash;
+  }
+
+  $(init);
+
+  function init() {
+    for (var i = 0; i < 3; i++) {
+      $(`<div class="tower" id="tower${i}"></>`).data("number", i).appendTo(".playingField");
+      $(`<div class="rod" id="rod${i}"></>`).data("diskCount", 0).appendTo(`#tower${i}`);
+      $(`<div class="base" id="base${i}"></>`).appendTo(`#tower${i}`);
+    }
+    $("#rod0").data("diskCount", numberOfDisks);
+
+
+    for (var i = 0; i < numberOfDisks; i++) {
+      var diskVar = `disk${i}`;
+      var disk = new Disk(i, getRandomColor());
+      // console.log(disk.order);
+      $(`<div class="disk" id="${diskVar}"></>`).data("order", i).appendTo("#rod0").draggable({
+        containment: ".playingField",
+        cursor: "move",
+        stack: "#rod0, #rod1, #rod2",
+        revert: true
+      });
+      // $("#rod0").data("diskArray").push(disk);
+      // console.log($("#rod0").data("diskArray"));
+      $(`#${diskVar}`).css({
+        "background": `${disk.color}`,
+        "width": `${disk.width}`,
+        "height": `${disk.height}`
+      });
+      // $(`#${diskVar}`).data("rodLocation", 0);
+    }
+
+    movable();
+
+
+    $(".rod").droppable({
+      accept: ".movable",
+      hoverClass: 'hovered',
+      drop: handleDiskDrop
+    });
 
     function movable() {
       $('.disk').removeClass("movable");
@@ -76,6 +126,7 @@ while (playing) {
           my: 'center bottom',
           at: 'center bottom'
         })
+
         moveCount++;
         movable();
         // returnRevert($(`#rod${rodNumber}`), ui);
@@ -95,7 +146,10 @@ while (playing) {
         return false;
       }
     }
+
   }
+
   isFirstOverallGame = false;
   playing = false;
+
 }
