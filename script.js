@@ -40,7 +40,8 @@ while (playing) {
   function getRandomColor() {
     var values = "0123456789ABCDEF";
     var hash = "#";
-    for (var i = 0; i < 6; i++) {
+    const HEX_DIGITS = 6;
+    for (var i = 0; i < HEX_DIGITS; i++) {
       hash += values[Math.floor(Math.random() * 16)];
     }
     return hash;
