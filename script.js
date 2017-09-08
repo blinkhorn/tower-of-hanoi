@@ -70,9 +70,9 @@ while (playing) {
       // $("#rod0").data("diskArray").push(disk);
       // console.log($("#rod0").data("diskArray"));
       $(`#${diskVar}`).css({
-        "background": `${disk.color}`,
-        "width": `${disk.width}`,
-        "height": `${disk.height}`
+        "background": disk.color,
+        "width": disk.width,
+        "height": disk.height
       });
       // $(`#${diskVar}`).data("rodLocation", 0);
     }
